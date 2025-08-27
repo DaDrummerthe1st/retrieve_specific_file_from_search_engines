@@ -7,6 +7,12 @@ from urllib.parse import urlparse, unquote
 from ddgs import DDGS
 import clamd
 
+# --- For output CSV file ---
+def saved_results(url, csv_file="pdf_search_output.csv"):
+    with open(csv_file, 'a') as report_csv:
+        report_csv.write(url)
+
+
 # --- Check Virusdefinition ---
 def check_freshclam_date():
     try:
@@ -102,10 +108,16 @@ def find_pdfs(query, max_results=20, download=True, download_dir="pdfs"):
                 local_name = get_filename_from_url(url, f"{query}_{i}.pdf")
                 filename = os.path.join(download_dir, local_name)
 
-                
-                with open(filename, "wb") as f:
-                    f.write(r.content)
+                if not os.path.isfile(filename):
+                    with open(filename, "wb") as f:
+                        f.write(r.content)
+                    saved_results(url)
+                else:
+                    print(f"File {local_name} already exists!")
 
+                # # This section kinda works...
+                # # It deletes ALL files but some exceptions when trying to scan.
+                # # Not because of find viruses but because of failures I didn't have time to troubleshoot
                 # # Scan with ClamAV
                 # if not scan_file_with_clamav(filename):
                 #     os.remove(filename)

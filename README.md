@@ -8,4 +8,9 @@ Please refrain from more than a few hundred searches per day.
 
 As of now no automatic virus search is conducted with this script and the ClamAV-application is not active.
 
+### Faulty files
+Some files are faulty. Chech for this is missing
+
+### TODO: Should've written it in OOP from start...
+
 Created in Ubuntu 24.04 with the help of [ChatGPT](https://chatgpt.com/share/68af8450-571c-800f-9125-dcdc9955f442).

@@ -72,13 +72,13 @@ def find_images(query, max_results=20, download=True, download_dir="images"):
     image_links = []
     os.makedirs(download_dir, exist_ok=True)
     with DDGS() as ddgs:
-        results = ddgs.text(f"{query} filetype:jpg OR filetype:png OR filetype:jpeg OR filetype:bmp OR filetype:gif OR filetype:tiff OR filetype:webp OR filetype:", max_results=max_results)
+        results = ddgs.text(f"{query} filetype:jpg OR filetype:png OR filetype:jpeg OR filetype:bmp OR filetype:gif OR filetype:tiff OR filetype:webp", max_results=max_results)
         for r in results:
             url = r.get("href", "")
             if not url:
                 continue
             # Check if it's an image link
-            is_image = url.lower().endswith((".jpg", ".jpeg", ".png"))
+            is_image = url.lower().endswith((".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp"))
             if not is_image:
                 try:
                     head = requests.head(url, timeout=5, allow_redirects=True)

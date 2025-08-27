@@ -5,3 +5,6 @@ rapport
 institution
 blankett
 redovisning
+man
+kvinna
+beach

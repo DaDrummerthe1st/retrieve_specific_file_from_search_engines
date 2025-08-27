@@ -1,6 +1,6 @@
 import os
 import requests
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 
 def find_pdfs(query, max_results=20, download=False, download_dir="pdfs"):
     """Search DuckDuckGo for PDFs and optionally download them."""

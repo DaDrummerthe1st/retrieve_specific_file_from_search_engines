@@ -22,16 +22,23 @@ def download_images_from_csv(csv_file="images.csv", output_dir="images"):
                 filename = os.path.join(output_dir, os.path.basename(image_url))
 
                 # Download the image
-                response = requests.get(image_url, stream=True, headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-                })
-                response.raise_for_status()  # Raise an error for bad status codes
+                # TODO: Some of the downloaded files are not actual picture files
+                if not os.path.isfile(filename):
+                    response = requests.get(image_url, stream=True, headers={
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                    })
+                    response.raise_for_status()  # Raise an error for bad status codes
 
-                # Save the image
-                with open(filename, 'wb') as f:
-                    for chunk in response.iter_content(chunk_size=8192):
-                        f.write(chunk)
-                print(f"Downloaded: {filename}")
+                    # Save the image
+                    try:
+                        with open(filename, 'wb') as f:
+                            for chunk in response.iter_content(chunk_size=8192):
+                                f.write(chunk)
+                        print(f"Downloaded: {filename}")
+                    except Exception as e:
+                        print(f"Something went wrong: {e}")
+                else:
+                    print("file already exists")
 
             except requests.exceptions.RequestException as e:
                 print(f"Failed to download {image_url}: {e}")

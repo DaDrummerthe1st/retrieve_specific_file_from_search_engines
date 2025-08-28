@@ -47,7 +47,7 @@ def save_to_csv(image_urls, filename="images.csv"):
     if image_urls is not None:
         with open(filename, mode='a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow(["Image URL"])
+            writer.writerow(["Image URL"]) #! generate one for each search in keyword
             for url in image_urls:
                 writer.writerow([url])
         print(f"Wrote {len(image_urls)} image URLs to {filename}.")

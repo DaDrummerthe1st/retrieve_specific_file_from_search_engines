@@ -22,8 +22,9 @@ def save_to_csv(pdf_urls, filename="pdfs.csv"):
             print(type(url))
             # url.replace(" ", "")
             # url_list = url.split(",")
-            for one_url in url:
-                writer.writerow(one_url)
+            # for one_url in url:
+            single_url = url.split(",")
+            writer.writerow(single_url)
     print(f"Wrote {len(pdf_urls)} PDF URLs to {filename}.")
     
     # # clean up the file
@@ -113,7 +114,7 @@ pdf_links_list = []
 if __name__ == "__main__":
     # after checks
     print("Starting process...")
-    keywords = load_keywords("search_engines_specific/duckduckgo/search_words.txt")
+    keywords = load_keywords("search_engines_specific/duckduckgo/search_words..txt")
 
     for kw in keywords:
         print(f"\n🔍 Searching for: {kw}")

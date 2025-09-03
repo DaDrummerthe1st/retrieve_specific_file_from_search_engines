@@ -10,28 +10,40 @@ from ddgs import DDGS
 # --- For output CSV file ---
 def save_to_csv(pdf_urls, filename="pdfs.csv"):
     """
-    Saves a list of pdf URLs to a CSV file.
-
-    :param pdf_urls: List of pdf URLs
+    Saves a list of pdf URLs to a CSV file, avoiding duplicates.
+    :param pdf_urls: List of lists of pdf URLs
     :param filename: Name of the CSV file (default: "pdfs.csv")
     """
+    # Read existing URLs from the file
+    existing_urls = set()
+    try:
+        with open(filename, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            next(reader, None)  # Skip the header
+            for row in reader:
+                if row:  # Ensure row is not empty
+                    existing_urls.add(row[0])
+    except FileNotFoundError:
+        pass  # File doesn't exist yet, so no existing URLs
+
+    # Collect new unique URLs
+    new_urls = set()
+    for url_list in pdf_urls:
+        for url in url_list:
+            if url not in existing_urls:
+                new_urls.add(url)
+
+    # Write new URLs to the file
     with open(filename, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow(["pdf URL"])
-        for url in pdf_urls:
-            print(type(url))
-            # url.replace(" ", "")
-            # url_list = url.split(",")
-            # for one_url in url:
-            single_url = url.split(",")
-            writer.writerow(single_url)
-    print(f"Wrote {len(pdf_urls)} PDF URLs to {filename}.")
-    
-    # # clean up the file
-    # try:
-    #     subprocess.run(f"sort -u", stdin=filename, stdout="pdfs_clean.csv")
-    # except Exception as e:
-    #     print(f"Something went wrong: {e}")
+        # Write header only if the file is empty
+        if not existing_urls:
+            writer.writerow(["pdf URL"])
+        for url in new_urls:
+            writer.writerow([url])
+
+    print(f"Added {len(new_urls)} new unique PDF URLs to {filename}.")
+
 
 # --- Load search keywords ---
 def load_keywords(filename="search_words.txt"):
@@ -114,7 +126,7 @@ pdf_links_list = []
 if __name__ == "__main__":
     # after checks
     print("Starting process...")
-    keywords = load_keywords("search_engines_specific/duckduckgo/search_words..txt")
+    keywords = load_keywords("search_engines_specific/duckduckgo/search_words.txt")
 
     for kw in keywords:
         print(f"\n🔍 Searching for: {kw}")
